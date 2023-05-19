@@ -1,4 +1,5 @@
 import numpy as np
+import math
 
 
 R_count = 6
@@ -117,3 +118,49 @@ def find_possible_locations(mainBoard):
         if check_empty_location(mainBoard, column):
             valid_locations.append(column)
     return valid_locations
+
+
+def minimax_algorithm(mainBoard, depth, alpha, beta, maximizingAgent):
+    possible_locations = find_possible_locations(mainBoard)
+    is_final = is_final_state(mainBoard)
+    if depth == 0 or is_final:
+        if is_final:
+            if check_winning_state(mainBoard, AGENT_PIECE):
+                return (None, -10000000000000)
+            elif check_winning_state(mainBoard, COMPUTER_PIECE):
+                return (None, 100000000000000)
+            else: 
+                return (None, 0)
+        else: 
+            return (None, score_arrangement(mainBoard, COMPUTER_PIECE))
+    if maximizingAgent:
+        val = -math.inf
+        best_column = 0
+        for column in possible_locations:
+            row = get_first_empty_row(mainBoard, column)
+            board_copy = mainBoard.copy()
+            addConnect4Piece(board_copy, row, column, COMPUTER_PIECE)
+            new_score = minimax_algorithm(board_copy, depth-1, alpha, beta, False)[1]
+            if new_score > val:
+                val = new_score
+                best_column = column
+            alpha = max(alpha, val)
+            if alpha >= beta:
+                break
+        return best_column, val
+
+    else:
+        val = math.inf
+        best_column = 0
+        for column in possible_locations:
+            row = get_first_empty_row(mainBoard, column)
+            board_copy = mainBoard.copy()
+            addConnect4Piece(board_copy, row, column, AGENT_PIECE)
+            new_score = minimax_algorithm(board_copy, depth-1, alpha, beta, True)[1]
+            if new_score < val:
+                val = new_score
+                best_column = column
+            beta = min(beta, val)
+            if alpha >= beta:
+                break
+        return best_column, val
