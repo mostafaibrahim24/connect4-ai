@@ -16,3 +16,7 @@ def addConnect4Piece(mainBoard, row, column, addedPiece):
 def check_empty_location(mainBoard, column):
     return mainBoard[R_count-1][column] == 0
 
+def get_first_empty_row(mainBoard, column):
+    for row in range(R_count):
+        if mainBoard[row][column] == 0:
+            return row
