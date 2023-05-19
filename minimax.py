@@ -1,8 +1,8 @@
 import numpy as np
 
-def flip_board(board):
+def flip_mainBoard(mainBoard):
     # Initializing a numpy 2D array from the board
-    board_copy = np.array(board)
+    mainBoard_copy = np.array(mainBoard)
     # Fliping the board
-    board_copy = np.flip(board_copy, 0)
-    return board_copy
+    mainBoard_copy = np.flip(mainBoard_copy, 0)
+    return mainBoard_copy
